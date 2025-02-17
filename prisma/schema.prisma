@@ -12,3 +12,18 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model Credential {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  username String @unique
+  password String
+  user User?
+}
+
+model User {
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  name String
+  email String @unique
+  credential Credential @relation(fields: [credentialId], references: [id])
+  credentialId String @db.ObjectId @unique
+}
