@@ -6,13 +6,15 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
+import { BillModule } from './bill/bill.module';
 
 @Module({
   imports: [
     CommonModule, 
     ConfigModule.forRoot(),
     AuthModule,
-    UserModule
+    UserModule,
+    BillModule
   ],
   controllers: [AppController],
   providers: [AppService],
