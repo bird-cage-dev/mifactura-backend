@@ -22,9 +22,10 @@ model Credential {
 
 model User {
   id                 String             @id @default(auto()) @map("_id") @db.ObjectId
+  profile            String?             @default("default")
   name               String
   identificationType IdentificationType
-  identification     String
+  identification     String             @unique
   email              String             @unique
   phone              String             @unique
   // birthday           DateTime           @ignore
@@ -36,18 +37,18 @@ model User {
 }
 
 model Bill {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  concept   String
-  image     String
-  amount    Float
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  concept      String
+  image        String
+  amount       Float
   // type      BillType
-  type      String
-  provider  String
+  type         String
+  provider     String
   observations String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   String   @db.ObjectId
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  owner        User     @relation(fields: [ownerId], references: [id])
+  ownerId      String   @db.ObjectId
 }
 
 enum IdentificationType {
