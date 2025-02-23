@@ -2,20 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
 import { PrismaService } from 'src/common/prisma/prisma.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class BillService {
 
-  constructor(private prismaService: PrismaService) { }
+  constructor(
+    private prismaService: PrismaService,
+    private userService: UserService
+  ) { }
 
   async create(bill: Express.Multer.File, createBillDto: CreateBillDto) {
-    const { amount, concept, owner, provider, type, observations } = createBillDto;
-
+    const { amount, concept, identificationOwner, provider, type, observations } = createBillDto;
+    const user = await this.userService.findOneByIdentification(identificationOwner);
+    const { id } = user;
     return await this.prismaService.bill.create({
       data: {
         amount: +amount,
         concept,
-        ownerId: owner,
+        ownerId: id,
         image: bill.filename,
         provider,
         type,
@@ -30,7 +35,6 @@ export class BillService {
         ownerId: userId,
       },
     });
-    console.log(bills)
     return bills;
   }
 

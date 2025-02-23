@@ -29,12 +29,12 @@ export class UserService {
     )
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.prismaService.user.findMany();
   }
 
   async findOneByCredentialId(credentialId: string) {
-    const user = await this.prismaService.user.findUnique({ where: { credentialId } });
+    const user = await this.prismaService.user.findUnique({ where: { credentialId }, include: { bills: true } });
     if (!user)
       throw new BadRequestException(`Not exist user with credentialId: ${credentialId}`);
     return user;
@@ -47,13 +47,29 @@ export class UserService {
     return user;
   }
 
-  // update(id: string, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async findOneByIdentification(identification: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        identification
+      }
+    });
+    if (!user)
+      throw new BadRequestException(`Not exist user with identification: ${identification}`)
+    return user;
+  }
 
-  // remove(id: string) {
-  //   return `This action removes a #${id} user`;
-  // }
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const { phone } = updateUserDto;
+    await this.prismaService.user.update({
+      data: {
+        phone
+      },
+      where: {
+        id
+      }
+    })
+  }
+
   async exists(where: Prisma.UserWhereUniqueInput) {
     const user = await this.prismaService.user.findUnique({ where });
     return !!user;

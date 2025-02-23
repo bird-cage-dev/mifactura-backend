@@ -1,8 +1,8 @@
-import { IsMongoId, IsNumber, IsNumberString, IsOptional, IsString } from "class-validator";
+import { IsNumberString, IsOptional, IsString } from "class-validator";
 
 export class CreateBillDto {
-    @IsMongoId()
-    public readonly owner: string;
+    @IsString()
+    public readonly identificationOwner: string;
 
     @IsString()
     public readonly concept: string;
