@@ -4,12 +4,14 @@ import { hash, compare } from 'bcrypt';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
 
   constructor(
     private prismaService: PrismaService,
-    private userService: UserService
+    private userService: UserService,
+    private jwtService: JwtService
   ) { }
 
   async create(createUserDto: CreateUserDto) {
@@ -33,8 +35,15 @@ export class AuthService {
     if (!credential)
       throw new BadRequestException(`Error in login, not exists username: ${username}`);
     const isEqualPassword = await compare(password, credential.password);
-    if (isEqualPassword)
-      return this.userService.findOneByCredentialId(credential.id);
+    if (isEqualPassword){
+      const user = await this.userService.findOneByCredentialId(credential.id);
+      const token = await this.jwtService.signAsync(JSON.stringify(user));
+      return {
+        token,
+        user
+      }
+
+    }
     throw new BadRequestException(`Error in credentials`);
   }
   // findAll() {

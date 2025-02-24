@@ -1,12 +1,12 @@
-import { IsEmpty, IsMongoId, IsObject, IsString } from "class-validator";
+import { IsEmpty, IsInt, IsObject, IsString } from "class-validator";
 
 export class CreateSubscriptionDto {
     @IsString()
     endpoint: string;
     
     @IsEmpty()
-    @IsString()
-    expirationTime: string;
+    @IsInt()
+    expirationTime?: number;
 
     @IsObject()
     keys: {

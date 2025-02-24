@@ -8,11 +8,20 @@ import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { BillModule } from './bill/bill.module';
 import { NotificationModule } from './notification/notification.module';
+import { JwtModule } from '@nestjs/jwt';
+import { env } from 'process';
 
 @Module({
   imports: [
     CommonModule, 
     ConfigModule.forRoot(),
+    JwtModule.register({
+      global: true,
+      secret: env.JWT_SECRET,
+      signOptions:{
+        
+      }
+    }),
     AuthModule,
     UserModule,
     BillModule,

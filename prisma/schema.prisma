@@ -67,7 +67,7 @@ enum IdentificationType {
 
 type SubscriptionObject {
   endpoint       String
-  expirationTime String?
+  expirationTime Int?
   keys           Key
 }
 

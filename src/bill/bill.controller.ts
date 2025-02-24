@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, ParseDatePipe, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, ParseDatePipe, UseInterceptors, UploadedFile, BadRequestException, UseGuards } from '@nestjs/common';
 import { BillService } from './bill.service';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
 import { MongoIdPipe } from 'src/mongo-id/mongo-id.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { generateVAPIDKeys, sendNotification } from 'web-push';
+import { AuthGuard } from 'src/auth/guard/auth/auth.guard';
 // import { diskStorage } from 'multer';
 
 @Controller('bill')
@@ -12,6 +12,7 @@ export class BillController {
   constructor(private readonly billService: BillService) { }
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('bill', {
     dest: 'files',
     // storage: diskStorage({
@@ -37,6 +38,7 @@ export class BillController {
   }
 
   @Get('user/:userId')
+  @UseGuards(AuthGuard)
   findAllByUserId(
     @Param('userId', MongoIdPipe) userId: string,
     @Query('take') take: number,
@@ -48,16 +50,19 @@ export class BillController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
     return this.billService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updateBillDto: UpdateBillDto) {
     return this.billService.update(id, updateBillDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   remove(@Param('id') id: string) {
     return this.billService.remove(id);
   }
