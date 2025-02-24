@@ -2,6 +2,7 @@
 /dist
 /node_modules
 /build
+/src/vapidKeys.ts
 # Logs
 logs
 *.log
