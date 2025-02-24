@@ -22,7 +22,7 @@ model Credential {
 
 model User {
   id                 String             @id @default(auto()) @map("_id") @db.ObjectId
-  profile            String?             @default("default")
+  profile            String?            @default("default")
   name               String
   identificationType IdentificationType
   identification     String             @unique
@@ -34,6 +34,14 @@ model User {
   credential         Credential         @relation(fields: [credentialId], references: [id])
   credentialId       String             @unique @db.ObjectId
   bills              Bill[]
+  Subscription       Subscription?
+}
+
+model Subscription {
+  id           String             @id @default(auto()) @map("_id") @db.ObjectId
+  subscription SubscriptionObject
+  user         User               @relation(fields: [userId], references: [id])
+  userId       String             @unique @db.ObjectId
 }
 
 model Bill {
@@ -57,6 +65,29 @@ enum IdentificationType {
   TI
 }
 
+type SubscriptionObject {
+  endpoint       String
+  expirationTime String?
+  keys           Key
+}
+
+type Key {
+  p256dh String
+  auth   String
+}
+
+// @IsString()
+// endpoint: string;
+
+// @IsEmpty()
+// @IsString()
+// expirationTime: string;
+
+// @IsObject()
+// keys: {
+// p256dh: string,
+// auth: string
+// }
 // enum BillType {
 //   FIX
 //   VARIABLE

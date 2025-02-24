@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { BillModule } from './bill/bill.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { BillModule } from './bill/bill.module';
     ConfigModule.forRoot(),
     AuthModule,
     UserModule,
-    BillModule
+    BillModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

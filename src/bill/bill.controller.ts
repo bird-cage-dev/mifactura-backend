@@ -4,6 +4,7 @@ import { CreateBillDto } from './dto/create-bill.dto';
 import { UpdateBillDto } from './dto/update-bill.dto';
 import { MongoIdPipe } from 'src/mongo-id/mongo-id.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { generateVAPIDKeys, sendNotification } from 'web-push';
 // import { diskStorage } from 'multer';
 
 @Controller('bill')
@@ -14,7 +15,7 @@ export class BillController {
   @UseInterceptors(FileInterceptor('bill', {
     dest: 'files',
     // storage: diskStorage({
-      
+
     // }),
     limits: {
       fileSize: 2000000,
@@ -30,7 +31,9 @@ export class BillController {
     @UploadedFile() bill: Express.Multer.File,
     @Body() createBillDto: CreateBillDto
   ) {
-    return this.billService.create(bill, createBillDto);
+    const newBill = this.billService.create(bill, createBillDto);
+
+    return newBill;
   }
 
   @Get('user/:userId')
