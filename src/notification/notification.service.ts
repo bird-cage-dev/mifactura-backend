@@ -9,8 +9,7 @@ import { sendNotification } from 'web-push';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 @Injectable()
 export class NotificationService {
-
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
 
   public getKey() {
     return decode(vapidKeys.publicKey);
@@ -20,29 +19,37 @@ export class NotificationService {
     return await this.prismaService.subscription.create({
       data: {
         userId,
-        subscription: { ...subscription }
-      }
+        subscription: { ...subscription },
+      },
     });
   }
 
   public async unsubscribe(subscriptionId: string) {
     return await this.prismaService.subscription.delete({
       where: {
-        id: subscriptionId
-      }
+        id: subscriptionId,
+      },
     });
   }
 
-  public async sendPushNotification(subscriptionId: string, notification: CreateNotificationDto) {
-
-    const subscription = await this.prismaService.subscription.findUnique({ where: { id: subscriptionId } });
+  public async sendPushNotification(
+    subscriptionId: string,
+    notification: CreateNotificationDto,
+  ) {
+    const subscription = await this.prismaService.subscription.findUnique({
+      where: { id: subscriptionId },
+    });
     if (!subscription)
-      throw new BadRequestException(`Not exist subscription with id: ${subscriptionId}`);
+      throw new BadRequestException(
+        `Not exist subscription with id: ${subscriptionId}`,
+      );
     try {
-      return await sendNotification(subscription.subscription, JSON.stringify(notification))
+      return await sendNotification(
+        subscription.subscription,
+        JSON.stringify(notification),
+      );
     } catch (error) {
       return await this.unsubscribe(subscriptionId);
     }
   }
 }
-
