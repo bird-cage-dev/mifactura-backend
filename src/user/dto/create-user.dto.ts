@@ -1,7 +1,5 @@
 import { IdentificationType } from "@prisma/client";
-import {
-    IsEnum, IsNumberString, IsOptional, IsPhoneNumber, IsString, Matches, ValidateNested
-} from "class-validator";
+import { IsEnum, IsNumberString, IsOptional, IsPhoneNumber, IsString, Matches, ValidateNested } from "class-validator";
 import { Type } from 'class-transformer';
 import { CreateAuthDto } from "src/auth/dto/create-auth.dto";
 

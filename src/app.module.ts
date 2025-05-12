@@ -19,7 +19,6 @@ import { env } from 'process';
       global: true,
       secret: env.JWT_SECRET,
       signOptions:{
-        
       }
     }),
     AuthModule,

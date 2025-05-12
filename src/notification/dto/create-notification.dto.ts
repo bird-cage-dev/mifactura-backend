@@ -5,5 +5,5 @@ export class CreateNotificationDto {
     public readonly title: string;
 
     @IsString()
-    public readonly body: string;    
+    public readonly body: string;
 }
