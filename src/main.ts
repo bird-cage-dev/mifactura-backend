@@ -12,10 +12,10 @@ async function main() {
       whitelist: false,
       transform: true,
       always: true,
-      forbidNonWhitelisted: true,//
-      forbidUnknownValues: true
+      forbidNonWhitelisted: true, //
+      forbidUnknownValues: true,
     }),
-  )
+  );
   const config = new DocumentBuilder()
     .setTitle('Swagger MiFactura')
     .setDescription('The MiFactura API description')
