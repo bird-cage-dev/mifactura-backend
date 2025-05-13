@@ -1,16 +1,16 @@
-import { IsEmpty, IsInt, IsObject, IsString } from "class-validator";
+import { IsInt, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateSubscriptionDto {
-    @IsString()
-    endpoint: string;
-    
-    @IsEmpty()
-    @IsInt()
-    expirationTime?: number;
+  @IsString()
+  endpoint: string;
 
-    @IsObject()
-    keys: {
-        p256dh: string,
-        auth: string
-    }
+  @IsOptional()
+  @IsInt()
+  expirationTime?: number;
+
+  @IsObject()
+  keys: {
+    p256dh: string;
+    auth: string;
+  };
 }
