@@ -15,6 +15,7 @@ export class NotificationService {
     });
   }
 
+
   public async getSubscriptions(userId: string) {
     return this.prisma.subscription.findMany({
       where: { userId },

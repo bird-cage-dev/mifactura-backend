@@ -6,27 +6,25 @@ import { Credential, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
 
   async create(createUserDto: CreateUserDto, credential: Credential) {
-    const { identification, name, phone, identificationType, profile } = createUserDto;
-    return await this.prismaService.user.create(
-      {
-        data: {
-          email: credential.username,
-          identification,
-          identificationType,
-          name,
-          profile,
-          phone,
-          credentialId: credential.id
-        },
-        omit: {
-          credentialId: true,
-        }
-      }
-    )
+    const { identification, name, phone, identificationType, profile } =
+      createUserDto;
+    return await this.prismaService.user.create({
+      data: {
+        email: credential.username,
+        identification,
+        identificationType,
+        name,
+        profile,
+        phone,
+        credentialId: credential.id,
+      },
+      omit: {
+        credentialId: true,
+      },
+    });
   }
 
   async findAll() {
@@ -34,27 +32,33 @@ export class UserService {
   }
 
   async findOneByCredentialId(credentialId: string) {
-    const user = await this.prismaService.user.findUnique({ where: { credentialId }, include: { bills: true } });
+    const user = await this.prismaService.user.findUnique({
+      where: { credentialId },
+      include: { bills: true },
+    });
     if (!user)
-      throw new BadRequestException(`Not exist user with credentialId: ${credentialId}`);
+      throw new BadRequestException(
+        `Not exist user with credentialId: ${credentialId}`,
+      );
     return user;
   }
 
   async findOne(id: string) {
     const user = await this.prismaService.user.findUnique({ where: { id } });
-    if (!user)
-      throw new BadRequestException(`Not exist user with id: ${id}`);
+    if (!user) throw new BadRequestException(`Not exist user with id: ${id}`);
     return user;
   }
 
   async findOneByIdentification(identification: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
-        identification
-      }
+        identification,
+      },
     });
     if (!user)
-      throw new BadRequestException(`Not exist user with identification: ${identification}`)
+      throw new BadRequestException(
+        `Not exist user with identification: ${identification}`,
+      );
     return user;
   }
 
@@ -62,12 +66,12 @@ export class UserService {
     const { phone } = updateUserDto;
     await this.prismaService.user.update({
       data: {
-        phone
+        phone,
       },
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 
   async exists(where: Prisma.UserWhereUniqueInput) {
